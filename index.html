@@ -98,6 +98,7 @@
             fill: none;
             stroke-width: 2.5;
             stroke-linecap: round;
+            vector-effect: non-scaling-stroke;
             filter: drop-shadow(0px 0px 4px rgba(255, 0, 128, 0.8)) 
                     drop-shadow(0px 0px 8px rgba(0, 230, 255, 0.8));
             opacity: 0;
@@ -324,18 +325,18 @@
                     </button>
                 </div>
 
-              <!-- Animated QR Code Card View -->
-<div id="qr-collapse-container" class="qr-collapse">
-    <div class="pt-2">
-        <div class="bg-white p-4 rounded-2xl flex flex-col items-center justify-center space-y-2 shadow-inner text-neutral-900 border border-white/20">
-            <!-- QR Code Image -->
-            <div class="w-44 h-44 relative flex items-center justify-center">
-                <img src="pixqr.jpeg" alt="QR Code Pix" class="w-full h-full object-contain rounded-lg">
-            </div>
-            <span class="text-[11px] text-neutral-500 font-medium">Aponte a câmera do aplicativo do seu banco</span>
-        </div>
-    </div>
-</div>
+                <!-- Animated QR Code Card View -->
+                <div id="qr-collapse-container" class="qr-collapse">
+                    <div class="pt-2">
+                        <div class="bg-white p-4 rounded-2xl flex flex-col items-center justify-center space-y-2 shadow-inner text-neutral-900 border border-white/20">
+                            <!-- QR Code Image -->
+                            <div class="w-44 h-44 relative flex items-center justify-center">
+                                <img src="pixqr.jpeg" alt="QR Code Pix" class="w-full h-full object-contain rounded-lg">
+                            </div>
+                            <span class="text-[11px] text-neutral-500 font-medium">Aponte a câmera do aplicativo do seu banco</span>
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Input Preview & Copy Trigger -->
                 <div class="flex items-center gap-2 bg-black/40 border border-white/10 rounded-xl p-1.5 pl-3">
@@ -380,16 +381,16 @@
                 const rect = btn.querySelector('.led-rect');
                 if (!svg || !rect) return;
 
-                const rectBounds = btn.getBoundingClientRect();
                 const strokeWidth = 2.5;
+                const width = btn.offsetWidth - strokeWidth;
+                const height = btn.offsetHeight - strokeWidth;
                 const halfStroke = strokeWidth / 2;
 
-                const width = rectBounds.width - strokeWidth;
-                const height = rectBounds.height - strokeWidth;
+                if (width <= 0 || height <= 0) return;
 
                 // Match button computed border radius precisely
                 const computedStyle = window.getComputedStyle(btn);
-                const borderRadius = parseFloat(computedStyle.borderRadius) || 16;
+                const borderRadius = parseFloat(computedStyle.borderRadius) || 20;
                 const rx = Math.max(0, borderRadius - halfStroke);
 
                 rect.setAttribute('x', halfStroke);
@@ -400,18 +401,12 @@
                 rect.setAttribute('ry', rx);
 
                 // Calculate exact perimeter around rounded rect
-                const perimeter = 2 * (width + height) - (8 * rx) + (2 * Math.PI * rx);
+                const perimeter = Math.round(2 * (width + height) - (8 * rx) + (2 * Math.PI * rx));
 
-                // Set initial dasharray & starting 12 o'clock offset
-                // Top center = width / 2 from start of path
-                const topCenterOffset = width / 2;
+                rect.setAttribute('pathLength', perimeter);
                 rect.style.strokeDasharray = `${perimeter}`;
                 rect.style.setProperty('--path-length', perimeter);
                 rect.style.strokeDashoffset = perimeter;
-                
-                // Rotate stroke to start exactly at top center (12 o'clock)
-                // Offset calculation: shift path by half top side width
-                rect.style.transformOrigin = 'center';
             });
         }
 
@@ -430,7 +425,7 @@
             // Trigger LED animation state
             buttonEl.classList.add('led-active');
 
-            // Wait exactly 750ms for the LED loop to close at 12 o'clock before executing action
+            // Wait exactly 750ms for the LED loop to close before executing action
             setTimeout(() => {
                 buttonEl.classList.remove('led-active');
                 activeLedAnimation = false;
