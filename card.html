@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Links | Visual iOS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Text', 'SF Pro Display', Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        /* iOS Background Mesh Gradient */
+        body {
+            background: #000000;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        .ambient-light {
+            position: fixed;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140vw;
+            height: 600px;
+            background: radial-gradient(circle at 50% 20%, rgba(120, 119, 198, 0.25) 0%, rgba(255, 255, 255, 0.05) 35%, transparent 70%);
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulseLight 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseLight {
+            0% { opacity: 0.7; transform: translateX(-50%) scale(1); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1.08); }
+        }
+
+        /* iOS Glassmorphism Card Style */
+        .ios-glass {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(25px) saturate(190%);
+            -webkit-backdrop-filter: blur(25px) saturate(190%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .ios-glass-interactive {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(25px) saturate(190%);
+            -webkit-backdrop-filter: blur(25px) saturate(190%);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            transition: transform 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        /* Spring Physics Feel on Touch/Hover */
+        .ios-button {
+            position: relative;
+            cursor: pointer;
+            border-radius: 1.25rem; /* 20px */
+            overflow: hidden;
+        }
+
+        .ios-button:hover {
+            transform: translateY(-2px) scale(1.015);
+            background: rgba(255, 255, 255, 0.13);
+            border-color: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .ios-button:active {
+            transform: scale(0.97) !important;
+            transition-duration: 0.1s !important;
+        }
+
+        /* Precision Fitted ARGB LED Overlay SVG */
+        .led-overlay {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 20;
+            overflow: visible;
+        }
+
+        .led-rect {
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            filter: drop-shadow(0px 0px 4px rgba(255, 0, 128, 0.8)) 
+                    drop-shadow(0px 0px 8px rgba(0, 230, 255, 0.8));
+            opacity: 0;
+            transition: opacity 0.15s ease;
+        }
+
+        .led-active .led-rect {
+            opacity: 1;
+            animation: drawLed 0.75s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+
+        @keyframes drawLed {
+            0% {
+                stroke-dashoffset: var(--path-length, 500);
+            }
+            100% {
+                stroke-dashoffset: 0;
+            }
+        }
+
+        /* Staggered Load Animations */
+        .stagger-item {
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            animation: iosEntrance 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+        .delay-5 { animation-delay: 0.5s; }
+
+        @keyframes iosEntrance {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* QR Code Accordion Dropdown transition */
+        .qr-collapse {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .qr-collapse.open {
+            grid-template-rows: 1fr;
+            opacity: 1;
+        }
+
+        .qr-collapse > div {
+            overflow: hidden;
+        }
+
+        /* Dynamic Island / Toast Animation */
+        .toast-enter {
+            animation: islandSpringIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+        }
+
+        .toast-exit {
+            animation: islandSpringOut 0.4s cubic-bezier(0.36, 0, 0.66, -0.56) forwards;
+        }
+
+        @keyframes islandSpringIn {
+            0% {
+                opacity: 0;
+                transform: translate(-50%, -30px) scale(0.7);
+            }
+            100% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+        }
+
+        @keyframes islandSpringOut {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -20px) scale(0.8);
+            }
+        }
+    </style>
+</head>
+<body class="text-white flex flex-col items-center justify-between min-h-screen p-4 sm:p-6 selection:bg-white/20 selection:text-white">
+
+    <!-- Ambient light background overlay -->
+    <div class="ambient-light"></div>
+
+    <!-- SVG Global Gradient Definition for ARGB LED Effect -->
+    <svg width="0" height="0" class="absolute">
+        <defs>
+            <linearGradient id="argbNeonGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff007f" />
+                <stop offset="30%" stop-color="#a855f7" />
+                <stop offset="65%" stop-color="#3b82f6" />
+                <stop offset="100%" stop-color="#00f2fe" />
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <!-- Floating iOS Toast / Dynamic Island Notification -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden opacity-0 transition-all duration-300">
+        <div class="ios-glass px-5 py-3 rounded-full flex items-center space-x-3 shadow-2xl border border-white/20 backdrop-blur-2xl">
+            <div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xs border border-emerald-500/30">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <span class="text-sm font-medium tracking-tight text-white/90" id="toast-message">Chave Pix copiada com sucesso!</span>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="w-full max-w-md relative z-10 flex flex-col items-center my-auto py-8">
+
+        <!-- Profile Avatar & Details -->
+        <div class="flex flex-col items-center text-center mb-8 stagger-item delay-1">
+            <div class="relative group cursor-pointer mb-4">
+                <!-- Glowing halo around avatar -->
+                <div class="absolute -inset-1 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-full blur opacity-40 group-hover:opacity-80 transition duration-500 group-hover:duration-200"></div>
+                
+                <div class="relative w-28 h-28 rounded-full overflow-hidden border-2 border-white/20 shadow-xl bg-neutral-900">
+                    <img 
+                        src="cu.jpg" 
+                        alt="Profile Avatar" 
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        onerror="this.onerror=null; this.src='https://placehold.co/300x300/18181b/ffffff?text=Sem foto ;-;';"
+                    />
+                </div>
+
+                <!-- Verified Badge -->
+                <div class="absolute bottom-1 right-1 bg-blue-500 text-white rounded-full w-6 h-6 flex items-center justify-center border-2 border-black text-xs shadow-md" title="Verificado">
+                    <i class="fa-solid fa-check text-[10px]"></i>
+                </div>
+            </div>
+
+            <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                GUSTAVO DA SILVA
+            </h1>
+            <p class="text-sm text-neutral-400 font-normal mt-1 tracking-wide">@mtoesbelto • @mtofofo</p>
+        </div>
+
+        <!-- Action Buttons Container -->
+        <div class="w-full space-y-3.5">
+
+            <!-- Instagram Button -->
+            <button onclick="triggerLedAction(this, 'https://instagram.com/mtoesbelto')" 
+                    class="ios-button ios-glass-interactive w-full p-4 rounded-2xl flex items-center justify-between group stagger-item delay-2">
+                <svg class="led-overlay"><rect class="led-rect" stroke="url(#argbNeonGradient)" /></svg>
+                <div class="flex items-center space-x-3.5">
+                    <div class="w-11 h-11 rounded-xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform">
+                        <i class="fa-brands fa-instagram text-2xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <span class="block text-sm font-semibold text-white tracking-tight">Instagram</span>
+                        <span class="block text-xs text-neutral-400">Fotos, reels e novidades</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-xs text-neutral-500 group-hover:text-white group-hover:translate-x-0.5 transition-all"></i>
+            </button>
+
+            <!-- WhatsApp Button -->
+            <button onclick="triggerLedAction(this, 'https://wa.me/5511968610803')" 
+                    class="ios-button ios-glass-interactive w-full p-4 rounded-2xl flex items-center justify-between group stagger-item delay-3">
+                <svg class="led-overlay"><rect class="led-rect" stroke="url(#argbNeonGradient)" /></svg>
+                <div class="flex items-center space-x-3.5">
+                    <div class="w-11 h-11 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                        <i class="fa-brands fa-whatsapp text-2xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <span class="block text-sm font-semibold text-white tracking-tight">WhatsApp</span>
+                        <span class="block text-xs text-neutral-400">Fale diretamente comigo</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-xs text-neutral-500 group-hover:text-white group-hover:translate-x-0.5 transition-all"></i>
+            </button>
+
+            <!-- Email Button -->
+            <button onclick="triggerLedAction(this, 'mailto:gustavo11silva@outlook.com')" 
+                    class="ios-button ios-glass-interactive w-full p-4 rounded-2xl flex items-center justify-between group stagger-item delay-4">
+                <svg class="led-overlay"><rect class="led-rect" stroke="url(#argbNeonGradient)" /></svg>
+                <div class="flex items-center space-x-3.5">
+                    <div class="w-11 h-11 rounded-xl bg-sky-500/20 text-sky-400 border border-sky-500/30 flex items-center justify-center shadow-lg group-hover:scale-105 transition-transform">
+                        <i class="fa-regular fa-envelope text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <span class="block text-sm font-semibold text-white tracking-tight">E-mail</span>
+                        <span class="block text-xs text-neutral-400">Negócios</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-chevron-right text-xs text-neutral-500 group-hover:text-white group-hover:translate-x-0.5 transition-all"></i>
+            </button>
+
+            <!-- Pix Section with SVG Logo, Copy & QR Code -->
+            <div class="ios-glass-interactive shimmer rounded-2xl overflow-hidden p-4 space-y-3.5 border border-white/14">
+                
+                <!-- Main Header with Pix SVG Icon -->
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3.5">
+                        <!-- Custom PIX SVG Logo Container -->
+                        <div class="w-11 h-11 rounded-xl bg-teal-500/20 border border-teal-500/30 flex items-center justify-center shadow-lg p-2.5">
+                            <svg viewBox="0 0 512 512" class="w-full h-full fill-teal-400" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M112.5 128.5L203.8 219.8C210.1 226.1 210.1 236.3 203.8 242.6L112.5 333.9C102.8 343.6 86.4 336.8 86.4 323.1V139.3C86.4 125.6 102.8 118.8 112.5 128.5ZM399.5 128.5C409.2 118.8 425.6 125.6 425.6 139.3V323.1C425.6 336.8 409.2 343.6 399.5 333.9L308.2 242.6C301.9 236.3 301.9 226.1 308.2 219.8L399.5 128.5ZM256 167.7L320.3 232C326.6 238.3 326.6 248.5 320.3 254.8L256 319.1L191.7 254.8C185.4 248.5 185.4 238.3 191.7 232L256 167.7ZM225.8 81.3L242.6 64.5C250 57.1 262 57.1 269.4 64.5L286.2 81.3C292.5 87.6 292.5 97.8 286.2 104.1L272.9 117.4L256 100.5L239.1 117.4L225.8 104.1C219.5 97.8 219.5 87.6 225.8 81.3ZM286.2 405.3L269.4 422.1C262 429.5 250 429.5 242.6 422.1L225.8 405.3C219.5 399 219.5 388.8 225.8 382.5L239.1 369.2L256 386.1L272.9 369.2L286.2 382.5C292.5 388.8 292.5 399 286.2 405.3Z"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <span class="block text-sm font-semibold text-white tracking-tight">Apoie com Pix</span>
+                            <span class="block text-xs text-neutral-400">Chave ou QR Code instantâneo</span>
+                        </div>
+                    </div>
+
+                    <!-- Toggle QR Code Button (Instant action - no LED animation) -->
+                    <button 
+                        onclick="toggleQRCode()" 
+                        id="qr-toggle-btn"
+                        class="ios-button bg-white/10 hover:bg-white/20 border border-white/15 text-white/90 text-xs px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-qrcode text-teal-400"></i>
+                        <span id="qr-toggle-text">QR Code</span>
+                        <i class="fa-solid fa-chevron-down text-[10px] text-neutral-400 transition-transform duration-300" id="qr-arrow"></i>
+                    </button>
+                </div>
+
+              <!-- Animated QR Code Card View -->
+<div id="qr-collapse-container" class="qr-collapse">
+    <div class="pt-2">
+        <div class="bg-white p-4 rounded-2xl flex flex-col items-center justify-center space-y-2 shadow-inner text-neutral-900 border border-white/20">
+            <!-- QR Code Image -->
+            <div class="w-44 h-44 relative flex items-center justify-center">
+                <img src="pixqr.jpeg" alt="QR Code Pix" class="w-full h-full object-contain rounded-lg">
+            </div>
+            <span class="text-[11px] text-neutral-500 font-medium">Aponte a câmera do aplicativo do seu banco</span>
+        </div>
+    </div>
+</div>
+
+                <!-- Input Preview & Copy Trigger -->
+                <div class="flex items-center gap-2 bg-black/40 border border-white/10 rounded-xl p-1.5 pl-3">
+                    <input 
+                        type="text" 
+                        id="pix-key-input" 
+                        value="a9e4f860-7929-4106-ba85-ea029fa99469" 
+                        class="bg-transparent text-xs text-neutral-300 w-full focus:outline-none font-mono selection:bg-teal-500/30 truncate" 
+                        readonly
+                    />
+                    <button 
+                        onclick="copyPixKey()" 
+                        id="copy-btn"
+                        class="ios-button bg-white text-black font-medium text-xs px-3.5 py-2 rounded-lg flex items-center justify-center gap-1.5 whitespace-nowrap shadow-md hover:bg-neutral-200 leading-none">
+                        <i class="fa-regular fa-copy text-xs leading-none"></i>
+                        <span class="leading-none">Copiar</span>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="relative z-10 text-center text-xs text-neutral-500 py-4 tracking-wider">
+        <p>© <span id="year"></span> • Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // Set dynamic year
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        let toastTimeout;
+        let activeLedAnimation = false;
+
+        // Recalculates and adjusts the SVG <rect> path on buttons for 100% exact border overlay
+        function setupButtonLedPaths() {
+            const buttons = document.querySelectorAll('.ios-button');
+
+            buttons.forEach(btn => {
+                const svg = btn.querySelector('.led-overlay');
+                const rect = btn.querySelector('.led-rect');
+                if (!svg || !rect) return;
+
+                const rectBounds = btn.getBoundingClientRect();
+                const strokeWidth = 2.5;
+                const halfStroke = strokeWidth / 2;
+
+                const width = rectBounds.width - strokeWidth;
+                const height = rectBounds.height - strokeWidth;
+
+                // Match button computed border radius precisely
+                const computedStyle = window.getComputedStyle(btn);
+                const borderRadius = parseFloat(computedStyle.borderRadius) || 16;
+                const rx = Math.max(0, borderRadius - halfStroke);
+
+                rect.setAttribute('x', halfStroke);
+                rect.setAttribute('y', halfStroke);
+                rect.setAttribute('width', width);
+                rect.setAttribute('height', height);
+                rect.setAttribute('rx', rx);
+                rect.setAttribute('ry', rx);
+
+                // Calculate exact perimeter around rounded rect
+                const perimeter = 2 * (width + height) - (8 * rx) + (2 * Math.PI * rx);
+
+                // Set initial dasharray & starting 12 o'clock offset
+                // Top center = width / 2 from start of path
+                const topCenterOffset = width / 2;
+                rect.style.strokeDasharray = `${perimeter}`;
+                rect.style.setProperty('--path-length', perimeter);
+                rect.style.strokeDashoffset = perimeter;
+                
+                // Rotate stroke to start exactly at top center (12 o'clock)
+                // Offset calculation: shift path by half top side width
+                rect.style.transformOrigin = 'center';
+            });
+        }
+
+        // Initialize LED path dimensions on load and window resize
+        window.addEventListener('load', setupButtonLedPaths);
+        window.addEventListener('resize', setupButtonLedPaths);
+
+        // Triggers the ARGB LED trace animation around the button border
+        function triggerLedAction(buttonEl, actionTarget) {
+            if (activeLedAnimation) return;
+            activeLedAnimation = true;
+
+            // Ensure dimensions are up-to-date
+            setupButtonLedPaths();
+
+            // Trigger LED animation state
+            buttonEl.classList.add('led-active');
+
+            // Wait exactly 750ms for the LED loop to close at 12 o'clock before executing action
+            setTimeout(() => {
+                buttonEl.classList.remove('led-active');
+                activeLedAnimation = false;
+
+                // Execute appropriate target action
+                if (actionTarget === 'toggle-qr') {
+                    toggleQRCode();
+                } else if (actionTarget === 'copy-pix') {
+                    copyPixKey();
+                } else if (actionTarget.startsWith('http') || actionTarget.startsWith('mailto')) {
+                    if (actionTarget.startsWith('mailto')) {
+                        window.location.href = actionTarget;
+                    } else {
+                        window.open(actionTarget, '_blank', 'noopener,noreferrer');
+                    }
+                }
+            }, 750);
+        }
+
+        // Toggle QR Code Display
+        function toggleQRCode() {
+            const container = document.getElementById('qr-collapse-container');
+            const arrow = document.getElementById('qr-arrow');
+            
+            const isOpen = container.classList.contains('open');
+            if (isOpen) {
+                container.classList.remove('open');
+                arrow.style.transform = 'rotate(0deg)';
+            } else {
+                container.classList.add('open');
+                arrow.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Function to copy Pix key and trigger iOS Dynamic Island toast
+        function copyPixKey() {
+            const pixInput = document.getElementById('pix-key-input');
+            const pixValue = pixInput.value || 'suachavepix@exemplo.com';
+
+            const tempInput = document.createElement('input');
+            tempInput.value = pixValue;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast('Chave Pix copiada com sucesso!');
+                triggerButtonSuccessState();
+            } catch (err) {
+                showToast('Erro ao copiar chave Pix');
+            } finally {
+                document.body.removeChild(tempInput);
+            }
+        }
+
+        // Animated Button state feedback
+        function triggerButtonSuccessState() {
+            const copyBtn = document.getElementById('copy-btn');
+            const originalHTML = copyBtn.innerHTML;
+
+            copyBtn.classList.remove('bg-white', 'text-black');
+            copyBtn.classList.add('bg-emerald-500', 'text-white');
+            copyBtn.innerHTML = `<i class="fa-solid fa-check text-xs leading-none"></i><span class="leading-none">Copiado!</span>`;
+
+            setTimeout(() => {
+                copyBtn.classList.remove('bg-emerald-500', 'text-white');
+                copyBtn.classList.add('bg-white', 'text-black');
+                copyBtn.innerHTML = originalHTML;
+            }, 2000);
+        }
+
+        // Show smooth iOS Dynamic Island style Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+
+            toastMsg.textContent = message;
+
+            clearTimeout(toastTimeout);
+
+            toast.classList.remove('hidden', 'toast-exit');
+            toast.classList.add('toast-enter');
+
+            toastTimeout = setTimeout(() => {
+                toast.classList.remove('toast-enter');
+                toast.classList.add('toast-exit');
+                
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 450);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
