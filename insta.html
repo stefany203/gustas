@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="2;url=https://instagram.com/mtoesbelto">
+    <title>Redirecionando... | Instagram</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'SF Pro Text', 'SF Pro Display', Helvetica, Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            box-sizing: border-box;
+        }
+
+        /* iOS Background Mesh Gradient */
+        body {
+            background: #000000;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ambient-light {
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120vw;
+            height: 500px;
+            background: radial-gradient(circle at 50% 50%, rgba(225, 48, 108, 0.25) 0%, rgba(131, 58, 180, 0.15) 40%, transparent 70%);
+            filter: blur(70px);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulseLight 6s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulseLight {
+            0% { opacity: 0.6; transform: translateX(-50%) scale(0.95); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1.05); }
+        }
+
+        /* iOS Glassmorphism Card Style */
+        .ios-glass {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(25px) saturate(190%);
+            -webkit-backdrop-filter: blur(25px) saturate(190%);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        /* Continuous Circular Loader Animation */
+        .spinner-ring {
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top-color: #e1306c;
+            border-right-color: #fd1d1d;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Progress Bar Animation */
+        .progress-bar-inner {
+            width: 0%;
+            animation: progressFill 2s linear forwards;
+        }
+
+        @keyframes progressFill {
+            to { width: 100%; }
+        }
+
+        /* Fade-in entrance animation */
+        .card-entrance {
+            opacity: 0;
+            transform: translateY(15px) scale(0.98);
+            animation: iosEntrance 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes iosEntrance {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+    </style>
+</head>
+<body class="text-white flex items-center justify-center min-h-screen p-4 selection:bg-white/20 selection:text-white">
+
+    <!-- Ambient light background overlay -->
+    <div class="ambient-light"></div>
+
+    <main class="w-full max-w-sm relative z-10 flex flex-col items-center card-entrance">
+        <!-- Glassmorphism Container Card -->
+        <div class="ios-glass w-full rounded-3xl p-8 flex flex-col items-center text-center space-y-6 shadow-2xl">
+            
+            <!-- Instagram Icon with Animated Loading Ring -->
+            <div class="relative flex items-center justify-center w-24 h-24 my-2">
+                <div class="absolute inset-0 spinner-ring"></div>
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center shadow-lg backdrop-blur-md">
+                    <i class="fa-brands fa-instagram text-3xl"></i>
+                </div>
+            </div>
+
+            <!-- Redirection Status Text -->
+            <div class="space-y-1.5">
+                <h1 class="text-xl font-bold tracking-tight text-white flex items-center justify-center gap-1.5">
+                    Redirecionando<span class="animate-pulse">...</span>
+                </h1>
+                <p class="text-xs text-neutral-400 tracking-wide font-normal">
+                    Abrindo o perfil no Instagram
+                </p>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-white/10 rounded-full h-1.5 overflow-hidden border border-white/5">
+                <div class="bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 h-full rounded-full progress-bar-inner"></div>
+            </div>
+
+            <!-- Manual Fallback Button -->
+            <div class="pt-2 w-full">
+                <a href="https://instagram.com/mtoesbelto" 
+                   class="inline-block text-xs text-neutral-400 hover:text-white transition-colors underline underline-offset-4 decoration-white/20">
+                    Clique aqui se não for redirecionado
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Redirect target URL
+        const redirectUrl = "https://instagram.com/mtoesbelto";
+
+        // Execute redirect precisely after 2000ms (2 seconds)
+        setTimeout(() => {
+            window.location.href = redirectUrl;
+        }, 2000);
+    </script>
+</body>
+</html>
